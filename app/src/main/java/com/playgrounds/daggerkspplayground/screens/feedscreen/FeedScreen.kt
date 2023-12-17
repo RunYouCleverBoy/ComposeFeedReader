@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,18 +34,21 @@ fun FeedScreen(
     onItemClicked: (FeedRepo.RssItem) -> Unit,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column (modifier = Modifier.fillMaxSize()){
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 TabRow(selectedTabIndex = selectedTabIndex) {
                     tabs.forEach { tab ->
-                        Tab (
+                        Tab(
                             selected = false,
                             onClick = { onTabSelected(tab) },
                             text = { Text(text = stringResource(id = tab.nameRes)) }
                         )
                     }
                 }
-                LazyColumn {
+                LazyColumn(Modifier.padding(16.dp)) {
                     items(feedData.size) { i ->
                         FeedCell(feedData[i], onItemClicked)
                     }
