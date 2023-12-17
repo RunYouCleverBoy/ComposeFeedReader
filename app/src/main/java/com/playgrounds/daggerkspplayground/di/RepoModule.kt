@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class MainModule {
+abstract class RepoModule {
     @Binds
     abstract fun provideRssApi(rssApiImpl: RssApiImpl): RssApi
 

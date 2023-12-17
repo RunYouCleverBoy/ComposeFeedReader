@@ -2,10 +2,10 @@ package com.playgrounds.daggerkspplayground.screens.feedscreen
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.playgrounds.daggerkspplayground.templates.MVIViewModel
 import com.playgrounds.daggerkspplayground.repos.FeedRepo
 import com.playgrounds.daggerkspplayground.repos.HistoryRepo
 import com.playgrounds.daggerkspplayground.repos.TabRepo
+import com.playgrounds.daggerkspplayground.templates.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
