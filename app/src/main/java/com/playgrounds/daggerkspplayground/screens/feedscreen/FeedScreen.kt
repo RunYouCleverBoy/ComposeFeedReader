@@ -14,6 +14,9 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -25,15 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.toSpannable
 import com.playgrounds.daggerkspplayground.R
 import com.playgrounds.daggerkspplayground.repos.FeedRepo
+import com.playgrounds.daggerkspplayground.ui.utils.detectDirection
 
 @Composable
 fun FeedScreen(
     isLoading: Boolean,
     tabs: List<TabDescriptor>,
     selectedTabIndex: Int = 0,
-    feedData: List<FeedRepo.RssItem>,
+    feedData: List<FeedRepo.FeedItem>,
     onTabSelected: (TabDescriptor) -> Unit,
-    onItemClicked: (FeedRepo.RssItem) -> Unit,
+    onItemClicked: (FeedRepo.FeedItem) -> Unit,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -65,13 +69,28 @@ fun FeedScreen(
 }
 
 @Composable
-fun FeedCell(rssFeed: FeedRepo.RssItem, onItemClicked: (FeedRepo.RssItem) -> Unit) {
-    Column(modifier = Modifier.clickable {
-        onItemClicked(rssFeed)
-    }) {
-        Text(text = rssFeed.title, style = TextStyle(textDirection = TextDirection.Content))
-        Text(text = rssFeed.description.toString(), style = TextStyle(textDirection = TextDirection.Content))
+fun FeedCell(feedItem: FeedRepo.FeedItem, onItemClicked: (FeedRepo.FeedItem) -> Unit) {
+    val direction: LayoutDirection by remember { derivedStateOf { feedItem.title.detectDirection } }
+    CompositionLocalProvider(LocalLayoutDirection provides direction) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onItemClicked(feedItem)
+            }) {
+            Text(text = feedItem.title, modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Content))
+            Text(text = feedItem.description.toString(), modifier = Modifier.fillMaxWidth(), style = TextStyle(textDirection = TextDirection.Content))
+        }
     }
+}
+
+
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
+@Composable
+fun FeedCellPreview() {
+    FeedCell(
+        feedItem = FeedRepo.FeedItem("Title", "Link", "ולהלן הכותרות".toSpannable()),
+        onItemClicked = {}
+    )
 }
 
 
@@ -82,9 +101,9 @@ fun FeedScreenPreview() {
         isLoading = false,
         tabs = listOf(TabDescriptor("Tab 1", R.string.sports), TabDescriptor("Tab 2", R.string.news)),
         feedData = listOf(
-            FeedRepo.RssItem("Title 1", "Link 1", "Description 1".toSpannable()),
-            FeedRepo.RssItem("Title 2", "Link 2", "Description 2".toSpannable()),
-            FeedRepo.RssItem("Title 3", "Link 3", "Description 3".toSpannable()),
+            FeedRepo.FeedItem("Title 1", "Link 1", "Description 1".toSpannable()),
+            FeedRepo.FeedItem("עוד יום", "Link 2", "הפינק פלויד לא יופיעו על החומה בירושלים".toSpannable()),
+            FeedRepo.FeedItem("Title 3", "Link 3", "Description 3".toSpannable()),
         ),
         onTabSelected = {},
         onItemClicked = {},

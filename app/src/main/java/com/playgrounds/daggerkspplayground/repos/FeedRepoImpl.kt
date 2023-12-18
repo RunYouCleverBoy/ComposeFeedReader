@@ -14,10 +14,10 @@ import kotlin.time.Duration.Companion.milliseconds
 class FeedRepoImpl @Inject constructor(
     private val rssApi: RssApi
 ): FeedRepo {
-    private val _data = MutableStateFlow(emptyMap<String, FeedRepo.RssFeed>())
-    override val stateFlow: StateFlow<Map<String, FeedRepo.RssFeed>> = _data
+    private val _data = MutableStateFlow(emptyMap<String, FeedRepo.Feed>())
+    override val stateFlow: StateFlow<Map<String, FeedRepo.Feed>> = _data
 
-    override suspend fun fetchFeed(url: String, expiration: Duration): Result<FeedRepo.RssFeed> {
+    override suspend fun fetchFeed(url: String, expiration: Duration): Result<FeedRepo.Feed> {
         val cachedFeed = _data.value[url]?.takeIf { it.age() < expiration }
         if (cachedFeed != null) {
             return Result.success(cachedFeed)
@@ -26,14 +26,14 @@ class FeedRepoImpl @Inject constructor(
         val result = rssApi.getFeed(url)
         return if (result.isSuccess) {
             val rssFeed = result.getOrThrow()
-            val rssItems = rssFeed.items.map { rssItem ->
-                FeedRepo.RssItem(
+            val feedItems = rssFeed.items.map { rssItem ->
+                FeedRepo.FeedItem(
                     title = rssItem.title,
                     link = rssItem.link,
                     description = HtmlCompat.fromHtml(rssItem.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
                 )
             }
-            val feed = FeedRepo.RssFeed(rssFeed.title, rssItems, System.currentTimeMillis())
+            val feed = FeedRepo.Feed(rssFeed.title, feedItems, System.currentTimeMillis())
             _data.update { it + (url to feed) }
             Result.success(feed)
         } else {
@@ -41,7 +41,7 @@ class FeedRepoImpl @Inject constructor(
         }
     }
 
-    private fun FeedRepo.RssFeed.age(): Duration {
+    private fun FeedRepo.Feed.age(): Duration {
         return (System.currentTimeMillis() - timeStamp).milliseconds
     }
 }

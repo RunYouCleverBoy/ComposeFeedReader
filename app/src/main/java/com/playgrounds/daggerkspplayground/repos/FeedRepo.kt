@@ -6,10 +6,10 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 interface FeedRepo {
-    data class RssFeed(val title: String, val items: List<RssItem>, val timeStamp: Long)
-    data class RssItem(val title: String, val link: String, val description: Spanned)
+    data class Feed(val title: String, val items: List<FeedItem>, val timeStamp: Long)
+    data class FeedItem(val title: String, val link: String, val description: Spanned)
 
-    val stateFlow: StateFlow<Map<String, RssFeed>>
+    val stateFlow: StateFlow<Map<String, Feed>>
 
-    suspend fun fetchFeed(url: String, expiration: Duration = 5.seconds): Result<RssFeed>
+    suspend fun fetchFeed(url: String, expiration: Duration = 5.seconds): Result<Feed>
 }

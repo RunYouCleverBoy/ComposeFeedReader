@@ -87,13 +87,13 @@ class FeedViewModel @Inject constructor(
 data class FeedState(
     val isLoading: Boolean = false,
     val selectedTabIndex: Int = 0,
-    val tabs: List<TabDescriptor> = emptyList(), val items: List<FeedRepo.RssItem> = emptyList()
+    val tabs: List<TabDescriptor> = emptyList(), val items: List<FeedRepo.FeedItem> = emptyList()
 )
 
 data class TabDescriptor(val id: String, @StringRes val nameRes: Int)
 
 sealed class FeedEvent {
-    data class OnItemClicked(val item: FeedRepo.RssItem) : FeedEvent()
+    data class OnItemClicked(val item: FeedRepo.FeedItem) : FeedEvent()
     data class OnTabOpened(val tabId: String) : FeedEvent()
 }
 
