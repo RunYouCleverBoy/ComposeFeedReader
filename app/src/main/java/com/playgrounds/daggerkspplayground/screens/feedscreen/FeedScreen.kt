@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -77,8 +76,8 @@ fun FeedCell(feedItem: FeedRepo.FeedItem, onItemClicked: (FeedRepo.FeedItem) -> 
             .clickable {
                 onItemClicked(feedItem)
             }) {
-            Text(text = feedItem.title, modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Content))
-            Text(text = feedItem.description.toString(), modifier = Modifier.fillMaxWidth(), style = TextStyle(textDirection = TextDirection.Content))
+            Text(text = feedItem.title, modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.titleMedium.copy(textDirection = TextDirection.Content))
+            Text(text = feedItem.description.toString(), modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.Content))
         }
     }
 }

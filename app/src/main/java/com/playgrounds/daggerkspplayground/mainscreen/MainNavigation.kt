@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.playgrounds.daggerkspplayground.screens.ScreenNames
 import com.playgrounds.daggerkspplayground.screens.feedscreen.FeedAction
 import com.playgrounds.daggerkspplayground.screens.feedscreen.FeedEvent
 import com.playgrounds.daggerkspplayground.screens.feedscreen.FeedScreen
@@ -19,8 +20,8 @@ import com.playgrounds.daggerkspplayground.screens.primaryscreen.PrimaryViewMode
 
 @Composable
 fun MainNavigation(navController: NavHostController, onActivityRequest: (MainAction) -> Unit) {
-    NavHost(navController = navController, startDestination = "main") {
-        composable("tabs") {
+    NavHost(navController = navController, startDestination = ScreenNames.Main.route) {
+        composable(ScreenNames.Tabs.route) {
             val viewModel: FeedViewModel = hiltViewModel()
             val state by viewModel.stateFlow.collectAsState()
             LaunchedEffect(key1 = Unit) {
@@ -38,7 +39,7 @@ fun MainNavigation(navController: NavHostController, onActivityRequest: (MainAct
                 onTabSelected = { viewModel.dispatchEvent(FeedEvent.OnTabOpened(it.id)) }
             ) { viewModel.dispatchEvent(FeedEvent.OnItemClicked(it)) }
         }
-        composable("main") {
+        composable(ScreenNames.Main.route) {
             val viewModel: PrimaryViewModel = hiltViewModel()
             LaunchedEffect(key1 = Unit) {
                 viewModel.actionFlow.collect{
@@ -58,4 +59,5 @@ fun MainNavigation(navController: NavHostController, onActivityRequest: (MainAct
 sealed class MainAction {
     data class OpenUrl(val url: String): MainAction()
 }
+
 

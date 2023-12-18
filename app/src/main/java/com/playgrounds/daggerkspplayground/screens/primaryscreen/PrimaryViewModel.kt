@@ -1,6 +1,7 @@
 package com.playgrounds.daggerkspplayground.screens.primaryscreen
 
 import androidx.lifecycle.viewModelScope
+import com.playgrounds.daggerkspplayground.screens.ScreenNames
 import com.playgrounds.daggerkspplayground.repos.HistoryRepo
 import com.playgrounds.daggerkspplayground.templates.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ class PrimaryViewModel @Inject constructor(
 
     override fun dispatchEvent(event: PrimaryEvent) {
         when (event) {
-            is PrimaryEvent.OnSurfDataClicked -> emitAction(PrimaryAction.NavigateTo("tabs"))
+            is PrimaryEvent.OnSurfDataClicked -> emitAction(PrimaryAction.NavigateTo(ScreenNames.Tabs.route))
         }
     }
 }
